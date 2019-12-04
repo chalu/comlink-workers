@@ -26,13 +26,20 @@
     <script>
             const takeOff = () => {
                 const timeSplainer  = document.querySelector('#timesplainer');
-    
-                const nextTime = () => {
+
+                const getTimeFromCurrentDate = () => {
                     const now = new Date();
     
                     const hours = now.getHours();
                     const minutes = now.getMinutes();
                     const seconds = now.getSeconds();
+                    const milliseconds = now.getMilliseconds();
+
+                    return {hours, minutes, seconds, milliseconds};
+                };
+    
+                const showTime = () => {
+                    const { hours, minutes, seconds } = getTimeFromCurrentDate();
                     timeSplainer.textContent = `${hours}:${minutes}:${seconds}`;
     
                     getNextTime();
@@ -40,12 +47,11 @@
     
                 const getNextTime = () => {
                     setTimeout(() => {
-                        requestAnimationFrame(nextTime);
+                        requestAnimationFrame(showTime);
                     }, 1000);
                 };
     
-                getNextTime();
-                
+                showTime();
             };
     
             document.addEventListener('DOMContentLoaded', takeOff);
