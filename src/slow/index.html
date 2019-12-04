@@ -23,35 +23,14 @@
         00:00:00
     </p>
     
-    <script>
+    <script type="module">
+            import { showTime, getTimeFromCurrentDate } from '../utils.js';
+
             const takeOff = () => {
                 const timeSplainer  = document.querySelector('#timesplainer');
-
-                const getTimeFromCurrentDate = () => {
-                    const now = new Date();
-    
-                    const hours = now.getHours();
-                    const minutes = now.getMinutes();
-                    const seconds = now.getSeconds();
-                    const milliseconds = now.getMilliseconds();
-
-                    return {hours, minutes, seconds, milliseconds};
-                };
-    
-                const showTime = () => {
-                    const { hours, minutes, seconds } = getTimeFromCurrentDate();
-                    timeSplainer.textContent = `${hours}:${minutes}:${seconds}`;
-    
-                    getNextTime();
-                };
-    
-                const getNextTime = () => {
-                    setTimeout(() => {
-                        requestAnimationFrame(showTime);
-                    }, 1000);
-                };
-    
-                showTime();
+                const runClock = showTime(timeSplainer);
+                
+                runClock();
             };
     
             document.addEventListener('DOMContentLoaded', takeOff);
