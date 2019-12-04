@@ -23,6 +23,32 @@
         00:00:00
     </p>
     
+    <script>
+            const takeOff = () => {
+                const timeSplainer  = document.querySelector('#timesplainer');
     
+                const nextTime = () => {
+                    const now = new Date();
+    
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+                    timeSplainer.textContent = `${hours}:${minutes}:${seconds}`;
+    
+                    getNextTime();
+                };
+    
+                const getNextTime = () => {
+                    setTimeout(() => {
+                        requestAnimationFrame(nextTime);
+                    }, 1000);
+                };
+    
+                getNextTime();
+                
+            };
+    
+            document.addEventListener('DOMContentLoaded', takeOff);
+        </script>
 </body>
 </html>
