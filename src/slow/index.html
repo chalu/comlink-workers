@@ -73,12 +73,21 @@
     
     <script type="module">
             import { showTime, getTimeFromCurrentDate } from '../utils.js';
+            import { analyzeText } from './stats.js';
+            
 
             const takeOff = () => {
                 const timeSplainer  = document.querySelector('#timesplainer');
                 const runClock = showTime(timeSplainer);
                 
                 runClock();
+
+                const inputElement = document.querySelector('textarea');
+                inputElement.addEventListener('input', ({target: field}) => {
+                    analyzeText(field.value);
+                });
+
+                analyzeText(inputElement.value);
             };
     
             document.addEventListener('DOMContentLoaded', takeOff);
