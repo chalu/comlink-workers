@@ -7,6 +7,18 @@
     <title>UI Thread</title>
 
     <style>
+        html, body{
+            height: 100%;   
+            margin: 0; 
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-flow: column;
+            background: #fff;
+        }
+
         #timesplainer {
             background: #808080;
             padding: 0.5em;
@@ -14,6 +26,29 @@
             color: #f1f1f1;
             font-size: xx-large;
             margin-top: 0;
+            margin-bottom: 0.5em;
+        }
+
+        #free-form-text {
+            flex-grow: 1;
+            padding: 0.7em;
+        }
+
+        #free-form-text textarea {
+            width: 99%;
+            max-width: 98.5%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-size: large;
+        }
+
+        #free-form-text textarea:focus {
+            outline:#fff;
+        }
+
+        #statsplainer {
+            padding: 0.7em;
         }
     </style>
 </head>
@@ -23,11 +58,11 @@
         00:00:00
     </p>
 
-    <div>
+    <div id="free-form-text">
         <textarea></textarea>
     </div>
 
-    <div>
+    <div id="statsplainer">
         <hr />
         <p>Char Count: <span id="char-count"></span></p>
         <p>Word Count: <span id="word-count"></span></p>
