@@ -17,6 +17,8 @@ const getNextTime = (uiElement) => {
 
 export const showTime = (uiElement) => {
     return () => {
+        if(!uiElement) return;
+        
         const { hours, minutes, seconds } = getTimeFromCurrentDate();
         uiElement.textContent = `${hours}:${minutes}:${seconds}`;
         getNextTime(uiElement);
