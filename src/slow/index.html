@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,10 @@
     <title>UI Thread</title>
 
     <style>
-        html, body{
-            height: 100%;   
-            margin: 0; 
+        html,
+        body {
+            height: 100%;
+            margin: 0;
             padding: 0;
         }
 
@@ -32,6 +34,7 @@
         #free-form-text {
             flex-grow: 1;
             padding: 0.7em;
+            border-bottom: 1px solid #ccc;
         }
 
         #free-form-text textarea {
@@ -44,14 +47,20 @@
         }
 
         #free-form-text textarea:focus {
-            outline:#fff;
+            outline: #fff;
         }
 
         #statsplainer {
             padding: 0.7em;
+            display: flex;
+        }
+
+        #statsplainer div {
+            flex-grow: 1;
         }
     </style>
 </head>
+
 <body>
 
     <p id="timesplainer">
@@ -63,34 +72,47 @@
     </div>
 
     <div id="statsplainer">
-        <hr />
-        <p>Char Count: <span id="char-count"></span></p>
-        <p>Word Count: <span id="word-count"></span></p>
-        <p>Line Count: <span id="line-count"></span></p>
-        <p>Paragraph Count: <span id="paragraph-count"></span></p>
-        <p>Most Used Word: <span id="most-used-word"></span></p>
+        <div>
+            <p>Char Count: <span id="char-count"></span></p>
+            <p>Word Count: <span id="word-count"></span></p>
+            <p>Line Count: <span id="line-count"></span></p>
+            <p>Most Used Word: <span id="most-used-word"></span></p>
+        </div>
+        <div>
+            <h1 id="fps-monitor"></h1>
+        </div>
     </div>
-    
+
     <script type="module">
-            import { showTime, getTimeFromCurrentDate } from '../utils.js';
-            import { analyzeText } from './stats.js';
-            
+        import { showTime, getTimeFromCurrentDate, getFPSMonitor } from '../utils.js';
+        import { analyzeText } from './stats.js';
 
-            const takeOff = () => {
-                const timeSplainer  = document.querySelector('#timesplainer');
-                const runClock = showTime(timeSplainer);
-                
-                runClock();
 
-                const inputElement = document.querySelector('textarea');
-                inputElement.addEventListener('input', ({target: field}) => {
-                    analyzeText(field.value);
+        const takeOff = () => {
+            const timeDisplay = document.querySelector('#timesplainer');
+            const runClock = showTime(timeDisplay);
+
+            const fpsDisplay = document.querySelector('#fps-monitor');
+            const monitorFPS = getFPSMonitor();
+
+            runClock();
+            monitorFPS(fpsDisplay);
+
+            const inputElement = document.querySelector('textarea');
+            const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
+            inputElement.addEventListener('input', ({ target: field }) => {
+                const { stats } = analyzeText(field.value);
+                requestAnimationFrame(() => {
+                    statsDisplays[0].textContent = stats.chars;
+                    statsDisplays[1].textContent = stats.words;
+                    statsDisplays[2].textContent = stats.lines;
+                    statsDisplays[3].textContent = stats.mostUsed ? stats.mostUsed[0] : 'N/A';
                 });
+            });
+        };
 
-                analyzeText(inputElement.value);
-            };
-    
-            document.addEventListener('DOMContentLoaded', takeOff);
-        </script>
+        document.addEventListener('DOMContentLoaded', takeOff);
+    </script>
 </body>
+
 </html>
