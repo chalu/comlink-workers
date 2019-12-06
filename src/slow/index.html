@@ -21,7 +21,7 @@
             background: #fff;
         }
 
-        #timesplainer {
+        body > p {
             background: #808080;
             padding: 0.5em;
             font-weight: bold;
@@ -29,6 +29,8 @@
             font-size: xx-large;
             margin-top: 0;
             margin-bottom: 0.5em;
+            display: flex;
+            justify-content: space-between;
         }
 
         #free-form-text {
@@ -63,8 +65,9 @@
 
 <body>
 
-    <p id="timesplainer">
-        00:00:00
+    <p>
+        <span id="timesplainer">00:00:00</span>
+        <span>UI-Thread</span>
     </p>
 
     <div id="free-form-text">
