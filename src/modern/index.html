@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Worker Thread</title>
+
+    <link rel="preload" crossorigin href="https://unpkg.com/comlink/dist/esm/comlink.mjs" as="script">
+
+    <title>Comlink Wrapper</title>
 
     <style>
         html,
@@ -67,7 +70,7 @@
 
     <p>
         <span id="timesplainer">00:00:00</span>
-        <span>Web Worker</span>
+        <span>Comlink</span>
     </p>
 
     <div id="free-form-text">
@@ -87,6 +90,7 @@
     </div>
 
     <script type="module">
+        import * as Comlink from "https://unpkg.com/comlink/dist/esm/comlink.mjs";
         import { showTime, getTimeFromCurrentDate, getFPSMonitor } from '../utils.js';
 
         const takeOff = () => {
@@ -99,24 +103,24 @@
             runClock();
             monitorFPS(fpsDisplay);
             
+            const grammerChecked = ({ status }) => {};
+            const Analyzer = Comlink.wrap( new Worker('./stats.js') );
+
             const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
-            const worker = new Worker('./stats.js');
-            worker.addEventListener('message', ({data}) => {
-                const { stats } = data;
+            const inputElement = document.querySelector('textarea');
+            inputElement.addEventListener('input', async ({ target: field }) => {
+                const text  = field.value || '';
+                if (text.trim() === '') return;
+
+                const { stats } = await Analyzer.analyzeText(text);
                 requestAnimationFrame(() => {
                     statsDisplays[0].textContent = stats.chars;
                     statsDisplays[1].textContent = stats.words;
                     statsDisplays[2].textContent = stats.lines;
                     statsDisplays[3].textContent = stats.mostUsed ? stats.mostUsed[0] : 'N/A';
                 });
-            });
 
-            const inputElement = document.querySelector('textarea');
-            inputElement.addEventListener('input', ({ target: field }) => {
-                const text = field.value || '';
-                if (text.trim() === '') return;
-
-                worker.postMessage(text);
+                await Analyzer.analyzeGrammer(text, Comlink.proxy(grammerChecked));
             });
         };
 

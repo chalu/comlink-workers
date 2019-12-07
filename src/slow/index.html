@@ -104,7 +104,10 @@
             const inputElement = document.querySelector('textarea');
             const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
             inputElement.addEventListener('input', ({ target: field }) => {
-                const { stats } = analyzeText(field.value);
+                const text = field.value || '';
+                if (text.trim() === '') return;
+
+                const { stats } = analyzeText(text);
                 requestAnimationFrame(() => {
                     statsDisplays[0].textContent = stats.chars;
                     statsDisplays[1].textContent = stats.words;

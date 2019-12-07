@@ -1,8 +1,15 @@
+importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
+
 const pipe = (...fns) => {
     return (data) => {
         return fns.reduce((payload, fn) => fn(payload), data);
     };
 };
+
+const busy = ({maxWait = 10000} = {}) => new Promise(resolve => {
+    const delay = Math.round( Math.random() * maxWait );
+    setTimeout(resolve, delay);
+});
 
 const massageData = (payload) => {
     payload.text = (payload.text || '').trim();
@@ -63,13 +70,29 @@ const analyze = pipe(
     clogByChars
 );
 
-const analyzeText = (text = '') => {
-    if (text.trim() === '') return;
-
-    return analyze({ text });
+const checkGrammer = async (text) => {
+    await busy();   // e.g calling a remote grammer checker API
+    return {
+        grammerErrors: 0,
+        spellingErrors: 0
+    }
 };
 
-self.addEventListener('message', ({ data }) => {
-    const { stats } = analyze({ text: data });
-    self.postMessage({ stats });
-});
+// externalised "API" object
+const Analyzer = {
+    analyzeText(text) {
+        return analyze({ text });
+    },
+
+    async analyzeGrammer(text, callback) {
+        // call async spelling and grammer checker
+        // then send the results back to the main thread
+        // by calling the callback function with it
+        // console.log('calling grammer checker');
+        const status = await checkGrammer(text);
+        callback({status});
+    }
+};
+
+// expose the "API"
+Comlink.expose(Analyzer, self);

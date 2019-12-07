@@ -25,6 +25,7 @@ export const showTime = (uiElement) => {
     };
 };
 
+// adapted from https://www.growingwiththeweb.com/2017/12/fast-simple-js-fps-counter.html
 export const getFPSMonitor = () => {
     const times = [];
     const monitor = (uiElement) => {
