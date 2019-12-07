@@ -1,3 +1,5 @@
+importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
+
 const pipe = (...fns) => {
     return (data) => {
         return fns.reduce((payload, fn) => fn(payload), data);
