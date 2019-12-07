@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <link
-        href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERAAAAAAAAERAQAAAAAAEBEAEAAAAAEAEQABAAAAEAARAAAQAAEAABEAAAEAEAAAEQAAABEAAAARAAAAEQAAABEAAAEAEAAAEQAAEAABAAARAAEAAAAQABEAEAAAAAEAEQEAAAAAABAREAAAAAAAAREREREREREREAAAAAP/wAAF/6AABv9gAAd+4AAHveAAB9vgAAfn4AAH5+AAB9vgAAe94AAHfuAABv9gAAX/oAAD/8AAAAAAAA"
-        rel="icon" type="image/x-icon" />
+      href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERAAAAAAAAERAQAAAAAAEBEAEAAAAAEAEQABAAAAEAARAAAQAAEAABEAAAEAEAAAEQAAABEAAAARAAAAEQAAABEAAAEAEAAAEQAAEAABAAARAAEAAAAQABEAEAAAAAEAEQEAAAAAABAREAAAAAAAAREREREREREREAAAAAP/wAAF/6AABv9gAAd+4AAHveAAB9vgAAfn4AAH5+AAB9vgAAe94AAHfuAABv9gAAX/oAAD/8AAAAAAAA"
+      rel="icon"
+      type="image/x-icon"
+    />
 
     <title>Comlink Demos</title>
 
-    <link rel="stylesheet" href="./styles.css">
-</head>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
-<body>
-
+  <body>
     <header>
-        <h2>Saving The Main Thread With <a href="https://github.com/chalu/comlink-workers">Workers & Comlink</a></h2>
+      <h2>
+        Saving The Main Thread With
+        <a href="https://github.com/chalu/comlink-workers">Workers & Comlink</a>
+      </h2>
     </header>
 
     <main>
-        <div data-ui-thread data-thread-type>
-            <iframe src="slow/index.html" frameborder="0"></iframe>
-        </div>
-        <div data-worker-thread data-thread-type>
-            <iframe src="fast/index.html" frameborder="0"></iframe>
-        </div>
-        <div data-comlink-thread data-thread-type>
-            <iframe src="modern/index.html" frameborder="0"></iframe>
-        </div>
+      <div data-ui-thread data-thread-type>
+        <iframe src="slow/index.html" frameborder="0"></iframe>
+      </div>
+      <div data-worker-thread data-thread-type>
+        <iframe src="fast/index.html" frameborder="0"></iframe>
+      </div>
+      <div data-comlink-thread data-thread-type>
+        <iframe src="modern/index.html" frameborder="0"></iframe>
+      </div>
     </main>
 
-    <footer>
-    </footer>
-
-</body>
-
+    <footer></footer>
+  </body>
 </html>
