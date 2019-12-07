@@ -6,6 +6,11 @@ const pipe = (...fns) => {
     };
 };
 
+const busy = ({maxWait = 10000} = {}) => new Promise(resolve => {
+    const delay = Math.round( Math.random() * maxWait );
+    setTimeout(resolve, delay);
+});
+
 const massageData = (payload) => {
     payload.text = (payload.text || '').trim();
     payload.stats = {};
@@ -65,12 +70,28 @@ const analyze = pipe(
     clogByChars
 );
 
+const checkGrammer = async (text) => {
+    await busy();
+    return {
+        grammerErrors: 0,
+        spellingErrors: 0
+    }
+};
+
 // externalised "API" object
 const Analyzer = {
-    analyzeText(text = '') {
-        if (text.trim() === '') return;
-
+    analyzeText(text) {
         return analyze({ text });
+    },
+
+    async analyzeGrammer(text, callback) {
+        if( !callback && typeof callback !== 'function') return;
+
+        // call async spelling and grammer checker
+        // then send the results back to the main thread
+        // by calling the callback with it
+        const status = await checkGrammer(text);
+        callback({status});
     }
 };
 

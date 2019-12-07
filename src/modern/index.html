@@ -105,16 +105,25 @@
             
             const Analyzer = Comlink.wrap( new Worker('./stats.js') );
 
+            const grammerChecked = ({ status }) => {
+                console.log(status);
+            };
+
             const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
             const inputElement = document.querySelector('textarea');
             inputElement.addEventListener('input', async ({ target: field }) => {
-                const { stats } = await Analyzer.analyzeText(field.value);
+                const text  = field.value || '';
+                if (text.trim() === '') return;
+
+                const { stats } = await Analyzer.analyzeText(text);
                 requestAnimationFrame(() => {
                     statsDisplays[0].textContent = stats.chars;
                     statsDisplays[1].textContent = stats.words;
                     statsDisplays[2].textContent = stats.lines;
                     statsDisplays[3].textContent = stats.mostUsed ? stats.mostUsed[0] : 'N/A';
                 });
+
+                await Analyzer.analyzeGrammer(text, Comlink.proxy(grammerChecked));
             });
         };
 
