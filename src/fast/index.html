@@ -98,13 +98,9 @@
 
             runClock();
             monitorFPS(fpsDisplay);
-
             
             const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
             const worker = new Worker('./stats.js');
-            worker.postMessage('one');
-            worker.postMessage('two');
-            worker.postMessage('three');
             worker.addEventListener('message', ({data}) => {
                 const { stats } = data;
                 requestAnimationFrame(() => {
@@ -117,7 +113,10 @@
 
             const inputElement = document.querySelector('textarea');
             inputElement.addEventListener('input', ({ target: field }) => {
-                worker.postMessage(field.value);
+                const text = field.value || '';
+                if (text.trim() === '') return;
+
+                worker.postMessage(text);
             });
         };
 

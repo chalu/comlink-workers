@@ -103,11 +103,8 @@
             runClock();
             monitorFPS(fpsDisplay);
             
+            const grammerChecked = ({ status }) => {};
             const Analyzer = Comlink.wrap( new Worker('./stats.js') );
-
-            const grammerChecked = ({ status }) => {
-                console.log(status);
-            };
 
             const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
             const inputElement = document.querySelector('textarea');

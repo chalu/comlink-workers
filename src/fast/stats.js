@@ -70,6 +70,6 @@ const analyzeText = (text = '') => {
 };
 
 self.addEventListener('message', ({ data }) => {
-    const stats = analyze({ text: data });
+    const { stats } = analyze({ text: data });
     self.postMessage({ stats });
 });

@@ -71,7 +71,7 @@ const analyze = pipe(
 );
 
 const checkGrammer = async (text) => {
-    await busy();
+    await busy();   // e.g calling a remote grammer checker API
     return {
         grammerErrors: 0,
         spellingErrors: 0
@@ -85,11 +85,10 @@ const Analyzer = {
     },
 
     async analyzeGrammer(text, callback) {
-        if( !callback && typeof callback !== 'function') return;
-
         // call async spelling and grammer checker
         // then send the results back to the main thread
-        // by calling the callback with it
+        // by calling the callback function with it
+        // console.log('calling grammer checker');
         const status = await checkGrammer(text);
         callback({status});
     }
