@@ -65,13 +65,14 @@ const analyze = pipe(
     clogByChars
 );
 
-const analyzeText = (text = '') => {
-    if (text.trim() === '') return;
+// externalised "API" object
+const Analyzer = {
+    analyzeText(text = '') {
+        if (text.trim() === '') return;
 
-    return analyze({ text });
+        return analyze({ text });
+    }
 };
 
-self.addEventListener('message', ({ data }) => {
-    const stats = analyze({ text: data });
-    self.postMessage({ stats });
-});
+// expose the "API"
+Comlink.expose(Analyzer, self);

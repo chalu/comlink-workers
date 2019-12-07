@@ -103,21 +103,18 @@
             runClock();
             monitorFPS(fpsDisplay);
             
+            const Analyzer = Comlink.wrap( new Worker('./stats.js') );
+
             const statsDisplays = [...document.querySelectorAll('#statsplainer span')];
-            const worker = new Worker('./stats.js');
-            worker.addEventListener('message', ({data}) => {
-                const { stats } = data;
+            const inputElement = document.querySelector('textarea');
+            inputElement.addEventListener('input', async ({ target: field }) => {
+                const { stats } = await Analyzer.analyzeText(field.value);
                 requestAnimationFrame(() => {
                     statsDisplays[0].textContent = stats.chars;
                     statsDisplays[1].textContent = stats.words;
                     statsDisplays[2].textContent = stats.lines;
                     statsDisplays[3].textContent = stats.mostUsed ? stats.mostUsed[0] : 'N/A';
                 });
-            });
-
-            const inputElement = document.querySelector('textarea');
-            inputElement.addEventListener('input', ({ target: field }) => {
-                worker.postMessage(field.value);
             });
         };
 
