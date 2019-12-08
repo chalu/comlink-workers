@@ -125,7 +125,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
     </footer>
 
     <script type="module">
-      import { showTime, getFPSMonitor } from "../../utils.js";
+      import { getTimer, getFPSMonitor } from "../../utils.js";
       import * as Comlink from "https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs";
 
       let Analyzer;
@@ -160,8 +160,8 @@ Thanks to Comlink, the team had a better experience building this version, so go
       };
 
       const initApp = async () => {
-        const runClock = showTime(document.querySelector("#timesplainer"));
-        runClock();
+        const showTime = getTimer(document.querySelector("#timesplainer"));
+        showTime();
 
         const monitorFPS = getFPSMonitor();
         monitorFPS(document.querySelector("#fps-monitor"));

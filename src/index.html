@@ -50,12 +50,12 @@
     </footer>
 
     <script type="module">
-      import { showTime } from "./utils.js";
+      import { getTimer } from "./utils.js";
 
       const initApp = () => {
         const timeDisplay = document.querySelector("#timesplainer");
-        const runClock = showTime(timeDisplay);
-        runClock();
+        const showTime = getTimer(timeDisplay);
+        showTime();
       };
 
       document.addEventListener("DOMContentLoaded", initApp);

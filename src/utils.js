@@ -9,21 +9,25 @@ export const getTimeFromCurrentDate = () => {
   return { hours, minutes, seconds, milliseconds };
 };
 
-const getNextTime = uiElement => {
-  setTimeout(() => {
-    requestAnimationFrame(showTime(uiElement));
-  }, 1000);
-};
+export const getTimer = uiElement => {
+  let next;
+  const ui = uiElement;
 
-export const showTime = uiElement => {
-  return () => {
-    const ui = uiElement;
+  const timer = () => {
     if (!ui) return;
 
     const { hours, minutes, seconds } = getTimeFromCurrentDate();
     ui.textContent = `${hours}:${minutes}:${seconds}`;
-    getNextTime(uiElement);
+    next();
   };
+
+  next = () => {
+    setTimeout(() => {
+      requestAnimationFrame(timer);
+    }, 1000);
+  };
+
+  return timer;
 };
 
 // adapted from https://www.growingwiththeweb.com/2017/12/fast-simple-js-fps-counter.html
