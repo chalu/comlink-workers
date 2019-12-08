@@ -48,5 +48,7 @@ main [data-thread-type] {
 }
 
 footer {
-    
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-around;
 }
