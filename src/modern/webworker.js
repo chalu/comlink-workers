@@ -1,8 +1,8 @@
-/* eslint-disable no-restricted-globals  */
-/* eslint-disable no-undef */
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 
-importScripts("https://unpkg.com/comlink@4.2.0/dist/umd/comlink.js");
-importScripts("./analyzer.js");
+import { expose } from "https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs";
+import { Analyzer } from "../analyzer.js";
 
 // expose the Analyzer "API"
-Comlink.expose(Analyzer);
+expose(Analyzer);

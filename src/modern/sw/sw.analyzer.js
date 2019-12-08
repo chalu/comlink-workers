@@ -4,6 +4,12 @@ const pipe = (...fns) => {
   };
 };
 
+const busy = ({ maxWait = 10000 } = {}) =>
+  new Promise(resolve => {
+    const delay = Math.round(Math.random() * maxWait);
+    setTimeout(resolve, delay);
+  });
+
 const massageData = payload => {
   payload.text = (payload.text || "").trim();
   payload.stats = {};
@@ -55,6 +61,7 @@ const clogCPUByWordCount = payload => {
   for (let i = Math.pow(num, 7); i >= 0; i -= 1) {
     Math.atan(i) * Math.tan(i);
   }
+
   return payload;
 };
 
@@ -67,6 +74,26 @@ const analyze = pipe(
   clogCPUByWordCount
 );
 
-const analyzeText = text => analyze({ text });
+const checkGrammer = async () => {
+  await busy(); // e.g calling a remote grammer checker API
+  return {
+    grammerErrors: 0,
+    spellingErrors: 0
+  };
+};
 
-export default analyzeText;
+// externalised "API" object
+const Analyzer = {
+  analyzeText(text) {
+    return analyze({ text });
+  },
+
+  async analyzeGrammer(text, callback) {
+    // call async spelling and grammer checker
+    // then send the results back to the main thread
+    // by calling the callback function with it
+    // console.log('calling grammer checker');
+    const status = await checkGrammer(text);
+    callback({ status });
+  }
+};

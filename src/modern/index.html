@@ -8,7 +8,7 @@
     <link
       rel="preload"
       crossorigin
-      href="https://unpkg.com/comlink/dist/esm/comlink.mjs"
+      href="https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs"
       as="script"
     />
 
@@ -101,7 +101,7 @@
         monitorFPS(document.querySelector("#fps-monitor"));
 
         const grammerChecked = ({ status }) => {};
-        const Analyzer = Comlink.wrap(new Worker("./webworker.js"));
+        const Analyzer = Comlink.wrap(new Worker("./webworker.js", {type: 'module'}));
 
         const statsDisplays = [
           ...document.querySelectorAll("#statsplainer span")

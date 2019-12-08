@@ -61,6 +61,7 @@ const clogCPUByWordCount = payload => {
   for (let i = Math.pow(num, 7); i >= 0; i -= 1) {
     Math.atan(i) * Math.tan(i);
   }
+
   return payload;
 };
 
@@ -82,8 +83,7 @@ const checkGrammer = async () => {
 };
 
 // externalised "API" object
-// can be exposed by Comlink
-const Analyzer = {
+export const Analyzer = {
   analyzeText(text) {
     return analyze({ text });
   },
@@ -97,3 +97,5 @@ const Analyzer = {
     callback({ status });
   }
 };
+
+export default Analyzer;
