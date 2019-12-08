@@ -94,8 +94,8 @@ Go ahead, tell us about your passions. There's no blocker now!"
       import { getFPSMonitor } from "../utils.js";
 
       const takeOff = () => {
-        const monitorFPS = getFPSMonitor();
-        monitorFPS(document.querySelector("#fps-monitor"));
+        const monitorFPS = getFPSMonitor(document.querySelector("#fps-monitor"));
+        monitorFPS();
 
         const statsDisplays = [
           ...document.querySelectorAll("#statsplainer span")

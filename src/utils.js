@@ -31,10 +31,11 @@ export const getTimer = uiElement => {
 };
 
 // adapted from https://www.growingwiththeweb.com/2017/12/fast-simple-js-fps-counter.html
-export const getFPSMonitor = () => {
+export const getFPSMonitor = uiElement => {
   const times = [];
-  const monitor = uiElement => {
-    const ui = uiElement;
+  const ui = uiElement;
+
+  const monitor = () => {
     requestAnimationFrame(() => {
       const now = performance.now();
       while (times.length > 0 && times[0] <= now - 1000) {
@@ -43,7 +44,7 @@ export const getFPSMonitor = () => {
       times.push(now);
 
       // const frames = times.length > 60 ? 60 : times.length;
-      ui.textContent = `${times.length} FPS`;
+      ui.textContent = `~${times.length} fps`;
 
       monitor(ui);
     });

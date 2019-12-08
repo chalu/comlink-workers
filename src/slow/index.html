@@ -95,8 +95,8 @@ Dumping code on the ui-thread like that's all we can do, is so Web 0.5. Good luc
       import Analyzer from "../analyzer.js";
 
       const takeOff = () => {
-        const monitorFPS = getFPSMonitor();
-        monitorFPS(document.querySelector("#fps-monitor"));
+        const monitorFPS = getFPSMonitor(document.querySelector("#fps-monitor"));
+        monitorFPS();
 
         const inputElement = document.querySelector("textarea");
         const statsDisplays = [
