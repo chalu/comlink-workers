@@ -69,7 +69,13 @@
     </p>
 
     <div id="free-form-text">
-      <textarea></textarea>
+      <textarea
+        placeholder="Task: Say a few words about yourself or something else.
+        
+Even if the compute-intensive analysis [e.g word count :)] does not keep up with the pace of your fingers, the UI will NOT freeze, not even under the weight of all that pending work.
+        
+Go ahead, tell us about your passions. There's no blocker now!"
+      ></textarea>
     </div>
 
     <div id="statsplainer">
@@ -94,7 +100,7 @@
         const statsDisplays = [
           ...document.querySelectorAll("#statsplainer span")
         ];
-        const worker = new Worker("./webworker.js", {type: 'module'});
+        const worker = new Worker("./webworker.js", { type: "module" });
         worker.addEventListener("message", ({ data }) => {
           const { stats } = data;
           requestAnimationFrame(() => {
