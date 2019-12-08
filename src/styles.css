@@ -17,10 +17,10 @@ header {
 }
 
 #timesplainer {
-  background: #808080;
+  background: lightblue;
   padding: 0.5em;
   font-weight: bold;
-  color: #f1f1f1;
+  color: navy;
   font-size: xx-large;
   margin-top: 0;
   margin-bottom: 0.5em;
@@ -39,7 +39,12 @@ main {
 main [data-thread-type] {
   flex-grow: 1;
   width: 30%;
-  border: 2px dashed #ccc;
+  /* border: 2px dashed #ccc; */
+}
+
+main [data-thread-type]:nth-child(2) {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
 }
 
 [data-thread-type] iframe {
