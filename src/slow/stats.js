@@ -30,13 +30,16 @@ const countLines = payload => {
 
 const findMostUsedWord = payload => {
   const { text } = payload;
-  const wordMap = text.split(/\s+/g).reduce((map, word) => {
-    if (word.trim().length >= 2) {
-      word = word.replace(/\W/g, "").toLowerCase();
-      map[word] = (map[word] || 0) + 1;
-    }
-    return map;
-  }, {});
+  const wordMap = text
+    .toLowerCase()
+    .split(/\s+/g)
+    .reduce((map, word) => {
+      if (word.length >= 2) {
+        const w = word.replace(/\W/g, "");
+        map[w] = (map[w] || 0) + 1;
+      }
+      return map;
+    }, {});
 
   const [mostUsed] = Object.entries(wordMap).sort((a, b) => b[1] - a[1]);
   payload.stats.mostUsed = mostUsed;
@@ -45,10 +48,10 @@ const findMostUsedWord = payload => {
 };
 
 // adapted from https://gist.github.com/sqren/5083d73f184acae0c5b7
-const clogCPUByCharsLen = payload => {
+const clogCPUByWordCount = payload => {
   /* eslint-disable no-restricted-properties */
   /* eslint-disable no-unused-expressions */
-  const num = payload.stats.chars;
+  const num = payload.stats.words;
   for (let i = Math.pow(num, 7); i >= 0; i -= 1) {
     Math.atan(i) * Math.tan(i);
   }
@@ -61,7 +64,7 @@ const analyze = pipe(
   countWords,
   countLines,
   findMostUsedWord,
-  clogCPUByCharsLen
+  clogCPUByWordCount
 );
 
 const analyzeText = text => analyze({ text });
