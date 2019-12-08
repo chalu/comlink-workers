@@ -18,7 +18,7 @@
       as="script"
     />
 
-    <title>Comlink SW Demo</title>
+    <title>Comlink Redux Demo</title>
 
     <link rel="stylesheet" href="../../styles.css" />
     <style>
@@ -86,17 +86,17 @@
       <div data-thread-type>
         <p>
           <span>Fast, Modern</span>
-          <span>Comlink + ServiceWorker</span>
+          <span>Comlink + WebWorker + Redux</span>
         </p>
 
         <div id="free-form-text">
           <textarea
-        placeholder="Task: Say a few words about yourself or something else.
+            placeholder="Task: Say a few words about yourself or something else.
         
 Even if the compute-intensive analysis [e.g word count :)] does not keep up with the pace of your fingers, the UI will NOT freeze, not even under the weight of all that pending work.
         
 Thanks to Comlink, the team had a better experience building this version, so go ahead, tell us about your passions. There's no blocker now!"
-      ></textarea>
+          ></textarea>
         </div>
 
         <div id="statsplainer">
@@ -118,46 +118,15 @@ Thanks to Comlink, the team had a better experience building this version, so go
         chalu/comlink-workers
       </a>
       <div>
-        <a href="../redux/">Comlink >> Redux</a>
+        <a href="./">Comlink >> Redux</a>
         <span>|</span>
-        <a href="./">Comlink >> ServiceWorkers</a>
+        <a href="../sw/">Comlink >> ServiceWorkers</a>
       </div>
     </footer>
 
     <script type="module">
       import { showTime, getFPSMonitor } from "../../utils.js";
       import * as Comlink from "https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs";
-
-      let Analyzer;
-
-      const grammerChecked = ({ status }) => {};
-      const statsDisplays = [
-        ...document.querySelectorAll("#statsplainer span")
-      ];
-      const inputElement = document.querySelector("textarea");
-      inputElement.addEventListener("input", async ({ target: field }) => {
-        const text = field.value || "";
-        if (text.trim() === "") return;
-
-        const { stats } = await Analyzer.analyzeText(text);
-        requestAnimationFrame(() => {
-          statsDisplays[0].textContent = stats.chars;
-          statsDisplays[1].textContent = stats.words;
-          statsDisplays[2].textContent = stats.lines;
-          statsDisplays[3].textContent = stats.mostUsed
-            ? stats.mostUsed[0]
-            : "N/A";
-        });
-
-        await Analyzer.analyzeGrammer(text, Comlink.proxy(grammerChecked));
-      });
-
-      const initComlink = async () => {
-        const { port1, port2 } = new MessageChannel();
-        const initMsg = { isHandshake: true, port: port1 };
-        navigator.serviceWorker.controller.postMessage(initMsg, [port1]);
-        Analyzer = Comlink.wrap(port2);
-      };
 
       const initApp = async () => {
         const runClock = showTime(document.querySelector("#timesplainer"));
@@ -166,22 +135,39 @@ Thanks to Comlink, the team had a better experience building this version, so go
         const monitorFPS = getFPSMonitor();
         monitorFPS(document.querySelector("#fps-monitor"));
 
-        if ("serviceWorker" in navigator) {
-          if (navigator.serviceWorker.controller) {
-            initComlink();
-          } else {
-            navigator.serviceWorker.oncontrollerchange = function () {
-              this.controller.onstatechange = function () {
-                if (this.state === "activated") {
-                    initComlink();
-                }
-              };
-            };
-            navigator.serviceWorker.register("./sw.js", {
-              scope: location.pathname
-            });
-          }
-        }
+        const statsDisplays = [
+          ...document.querySelectorAll("#statsplainer span")
+        ];
+
+        const StateMngr = Comlink.wrap(
+          new Worker("./store.webworker.js", { type: "module" })
+        );
+        const stateChanged = async () => {
+          const { stats } = await StateMngr.getState();
+
+          // In a typical reactive app, we will update local
+          // copies of portions of the stats object that matter to this view
+          // With such change registered, the render() function will be triggered
+          // and our UI will be updated
+          requestAnimationFrame(() => {
+            statsDisplays[0].textContent = stats.chars;
+            statsDisplays[1].textContent = stats.words;
+            statsDisplays[2].textContent = stats.lines;
+            statsDisplays[3].textContent = stats.mostUsed
+              ? stats.mostUsed[0]
+              : "N/A";
+          });
+        };
+
+        StateMngr.subscribe(Comlink.proxy(stateChanged));
+
+        const inputElement = document.querySelector("textarea");
+        inputElement.addEventListener("input", async ({ target: field }) => {
+          const text = field.value || "";
+          if (text.trim() === "") return;
+
+          await StateMngr.dispatch({ type: "ANALYZE", text });
+        });
       };
 
       document.addEventListener("DOMContentLoaded", initApp);
