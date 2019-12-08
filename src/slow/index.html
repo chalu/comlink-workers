@@ -64,7 +64,7 @@
 
   <body>
     <p>
-      <span id="timesplainer">00:00:00</span>
+      <span>Slow</span>
       <span>UI-Thread</span>
     </p>
 
@@ -85,18 +85,12 @@
     </div>
 
     <script type="module">
-      import { showTime, getFPSMonitor } from "../utils.js";
+      import { getFPSMonitor } from "../utils.js";
       import analyzeText from "./stats.js";
 
       const takeOff = () => {
-        const timeDisplay = document.querySelector("#timesplainer");
-        const runClock = showTime(timeDisplay);
-
-        const fpsDisplay = document.querySelector("#fps-monitor");
         const monitorFPS = getFPSMonitor();
-
-        runClock();
-        monitorFPS(fpsDisplay);
+        monitorFPS(document.querySelector("#fps-monitor"));
 
         const inputElement = document.querySelector("textarea");
         const statsDisplays = [

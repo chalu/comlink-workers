@@ -22,6 +22,8 @@
         Saving The Main Thread With
         <a href="https://github.com/chalu/comlink-workers">Workers & Comlink</a>
       </h2>
+
+      <p id="timesplainer">00:00:00</p>
     </header>
 
     <main>
@@ -37,5 +39,17 @@
     </main>
 
     <footer></footer>
+
+    <script type="module">
+      import { showTime } from "./utils.js";
+
+      const initApp = () => {
+        const timeDisplay = document.querySelector("#timesplainer");
+        const runClock = showTime(timeDisplay);
+        runClock();
+      };
+
+      document.addEventListener("DOMContentLoaded", initApp);
+    </script>
   </body>
 </html>

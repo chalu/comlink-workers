@@ -13,6 +13,19 @@ body {
 
 header {
   display: flex;
+  justify-content: space-evenly;
+}
+
+#timesplainer {
+  background: #808080;
+  padding: 0.5em;
+  font-weight: bold;
+  color: #f1f1f1;
+  font-size: xx-large;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  min-width: 150px;
+  display: flex;
   justify-content: center;
 }
 
