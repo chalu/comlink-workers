@@ -1,5 +1,3 @@
-importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
-
 const pipe = (...fns) => {
   return data => {
     return fns.reduce((payload, fn) => fn(payload), data);
@@ -84,6 +82,7 @@ const checkGrammer = async () => {
 };
 
 // externalised "API" object
+// can be exposed by Comlink
 const Analyzer = {
   analyzeText(text) {
     return analyze({ text });
@@ -98,6 +97,3 @@ const Analyzer = {
     callback({ status });
   }
 };
-
-// expose the "API"
-Comlink.expose(Analyzer);

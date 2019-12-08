@@ -94,7 +94,7 @@
         const statsDisplays = [
           ...document.querySelectorAll("#statsplainer span")
         ];
-        const worker = new Worker("./stats.js");
+        const worker = new Worker("./analyzer.webworker.js");
         worker.addEventListener("message", ({ data }) => {
           const { stats } = data;
           requestAnimationFrame(() => {

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link
+      href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERAAAAAAAAERAQAAAAAAEBEAEAAAAAEAEQABAAAAEAARAAAQAAEAABEAAAEAEAAAEQAAABEAAAARAAAAEQAAABEAAAEAEAAAEQAAEAABAAARAAEAAAAQABEAEAAAAAEAEQEAAAAAABAREAAAAAAAAREREREREREREAAAAAP/wAAF/6AABv9gAAd+4AAHveAAB9vgAAfn4AAH5+AAB9vgAAe94AAHfuAABv9gAAX/oAAD/8AAAAAAAA"
+      rel="icon"
+      type="image/x-icon"
+    />
+
+    <title>Comlink Demos</title>
+
+    <link rel="stylesheet" href="../../styles.css" />
+    <style>
+      body [data-thread-type] {
+        flex-grow: unset;
+        width: 45%;
+        display: flex;
+        flex-flow: column;
+        background: #fff;
+      }
+
+      body [data-thread-type] > p {
+        background: navy;
+        padding: 0.5em;
+        font-weight: bold;
+        color: #f1f1f1;
+        font-size: x-large;
+        margin-top: 0;
+        margin-bottom: 0.5em;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #free-form-text {
+        flex-grow: 1;
+        padding: 0.7em;
+        border-bottom: 1px solid #ccc;
+      }
+
+      #free-form-text textarea {
+        width: 99%;
+        max-width: 98.5%;
+        height: 100%;
+        border: none;
+        resize: none;
+        font-size: large;
+      }
+
+      #free-form-text textarea:focus {
+        outline: #fff;
+      }
+
+      #statsplainer {
+        padding: 0.7em;
+        display: flex;
+      }
+
+      #statsplainer div {
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h2>
+        Save The Main Thread & Do More Work With
+        <a href="https://github.com/chalu/comlink-workers">Workers & Comlink</a>
+      </h2>
+
+      <p id="timesplainer">00:00:00</p>
+    </header>
+
+    <main>
+      <div data-thread-type>
+        <p>
+          <span>Fast, Modern</span>
+          <span>Comlink + ServiceWorkers</span>
+        </p>
+
+        <div id="free-form-text">
+          <textarea></textarea>
+        </div>
+
+        <div id="statsplainer">
+          <div>
+            <p>Char Count: <span id="char-count"></span></p>
+            <p>Word Count: <span id="word-count"></span></p>
+            <p>Line Count: <span id="line-count"></span></p>
+            <p>Most Used Word: <span id="most-used-word"></span></p>
+          </div>
+          <div>
+            <h1 id="fps-monitor"></h1>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <a href="https://github.com/chalu/comlink-workers" target="_blank">
+        chalu/comlink-workers
+      </a>
+      <div>
+        <a href="./redux.html">Comlink >> Redux</a>
+        <span>|</span>
+        <a href="/">Comlink >> ServiceWorkers</a>
+      </div>
+    </footer>
+
+    <script type="module">
+      import { showTime, getFPSMonitor } from "../../utils.js";
+      import * as Comlink from "https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs";
+
+      let Analyzer;
+
+      const grammerChecked = ({ status }) => {};
+      const statsDisplays = [
+        ...document.querySelectorAll("#statsplainer span")
+      ];
+      const inputElement = document.querySelector("textarea");
+      inputElement.addEventListener("input", async ({ target: field }) => {
+        const text = field.value || "";
+        if (text.trim() === "") return;
+
+        const { stats } = await Analyzer.analyzeText(text);
+        requestAnimationFrame(() => {
+          statsDisplays[0].textContent = stats.chars;
+          statsDisplays[1].textContent = stats.words;
+          statsDisplays[2].textContent = stats.lines;
+          statsDisplays[3].textContent = stats.mostUsed
+            ? stats.mostUsed[0]
+            : "N/A";
+        });
+
+        await Analyzer.analyzeGrammer(text, Comlink.proxy(grammerChecked));
+      });
+
+      const initComlink = async () => {
+        const { port1, port2 } = new MessageChannel();
+        const initMsg = { isHandshake: true, port: port1 };
+        navigator.serviceWorker.controller.postMessage(initMsg, [port1]);
+        Analyzer = Comlink.wrap(port2);
+      };
+
+      const initApp = async () => {
+        const runClock = showTime(document.querySelector("#timesplainer"));
+        runClock();
+
+        const monitorFPS = getFPSMonitor();
+        monitorFPS(document.querySelector("#fps-monitor"));
+
+        if ("serviceWorker" in navigator) {
+          if (navigator.serviceWorker.controller) {
+            initComlink();
+          } else {
+            navigator.serviceWorker.oncontrollerchange = function () {
+              this.controller.onstatechange = function () {
+                if (this.state === "activated") {
+                    initComlink();
+                }
+              };
+            };
+            navigator.serviceWorker.register("./sw.js", {
+              scope: location.pathname
+            });
+          }
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", initApp);
+    </script>
+  </body>
+</html>
