@@ -106,7 +106,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
         const monitorFPS = getFPSMonitor(document.querySelector("#fps-monitor"));
         monitorFPS();
 
-        const grammerChecked = ({ status }) => {};
+        const grammarChecked = ({ status }) => {};
         const Analyzer = Comlink.wrap(new Worker("./webworker.js", {type: 'module'}));
 
         const statsDisplays = [
@@ -127,7 +127,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
               : "N/A";
           });
 
-          await Analyzer.analyzeGrammer(text, Comlink.proxy(grammerChecked));
+          await Analyzer.analyzeGrammar(text, Comlink.proxy(grammarChecked));
         });
       };
 

@@ -130,7 +130,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
 
       let Analyzer;
 
-      const grammerChecked = ({ status }) => {};
+      const grammarChecked = ({ status }) => {};
       const statsDisplays = [
         ...document.querySelectorAll("#statsplainer span")
       ];
@@ -149,7 +149,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
             : "N/A";
         });
 
-        await Analyzer.analyzeGrammer(text, Comlink.proxy(grammerChecked));
+        await Analyzer.analyzeGrammar(text, Comlink.proxy(grammarChecked));
       });
 
       const initComlink = async () => {

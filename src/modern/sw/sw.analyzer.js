@@ -74,10 +74,10 @@ const analyze = pipe(
   clogCPUByWordCount
 );
 
-const checkGrammer = async () => {
-  await busy(); // e.g calling a remote grammer checker API
+const checkGrammar = async () => {
+  await busy(); // e.g calling a remote grammar checker API
   return {
-    grammerErrors: 0,
+    grammarErrors: 0,
     spellingErrors: 0
   };
 };
@@ -88,12 +88,12 @@ const Analyzer = {
     return analyze({ text });
   },
 
-  async analyzeGrammer(text, callback) {
-    // call async spelling and grammer checker
+  async analyzeGrammar(text, callback) {
+    // call async spelling and grammar checker
     // then send the results back to the main thread
     // by calling the callback function with it
-    // console.log('calling grammer checker');
-    const status = await checkGrammer(text);
+    // console.log('calling grammar checker');
+    const status = await checkGrammar(text);
     callback({ status });
   }
 };
