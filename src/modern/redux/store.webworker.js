@@ -1,7 +1,10 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
-/* Inspired by https://dassur.ma/things/react-redux-comlink/ */
+/**
+ * Web worker to power redux state management.
+ * Inspired article from https://dassur.ma/things/react-redux-comlink/
+ */
 
 import {
   expose,

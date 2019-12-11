@@ -1,3 +1,8 @@
+/**
+ * Text Analyzer module for service workers
+ * @module Analyzer
+ */
+
 const pipe = (...fns) => {
   return data => {
     return fns.reduce((payload, fn) => fn(payload), data);
@@ -82,17 +87,30 @@ const checkGrammar = async () => {
   };
 };
 
-// externalised "API" object
+/**
+ * exposed Analyzer "API"
+ */
 const Analyzer = {
+  /**
+   * analyze the provided text for character, word and line count.
+   * also determines most used word.
+   * the analysis will be representated by an object containing
+   * 'chars', 'words', 'lines', and 'mostUsed' fields, all of which are
+   * numbers except 'mostUsed' which is an array of the most used word and
+   * how many times it occurs in the text
+   * @param {string} text text to analyze
+   * @returns {object} object with a 'stats' property representing the analysis
+   */
   analyzeText(text) {
     return analyze({ text });
   },
 
+  /**
+   * simulate asynchrounous spelling and grammar analysis on the provided text
+   * @param {string} text text to analyze grammer on
+   * @param {*} callback main thread function to call when async analysis is complete
+   */
   async analyzeGrammar(text, callback) {
-    // call async spelling and grammar checker
-    // then send the results back to the main thread
-    // by calling the callback function with it
-    // console.log('calling grammar checker');
     const status = await checkGrammar(text);
     callback({ status });
   }

@@ -1,4 +1,9 @@
-export const getTimeFromCurrentDate = () => {
+/**
+ * Utils module.
+ * @module Utils
+ */
+
+const getTimeFromCurrentDate = () => {
   const now = new Date();
 
   const hours = now.getHours();
@@ -9,6 +14,11 @@ export const getTimeFromCurrentDate = () => {
   return { hours, minutes, seconds, milliseconds };
 };
 
+/**
+ * provides a time display function for system time
+ * @param {object} uiElement DOM node to display system time
+ * @returns {function} the function to invoke to render system time
+ */
 export const getTimer = uiElement => {
   let next;
   const ui = uiElement;
@@ -30,7 +40,11 @@ export const getTimer = uiElement => {
   return timer;
 };
 
-// adapted from https://www.growingwiththeweb.com/2017/12/fast-simple-js-fps-counter.html
+/**
+ * constantly estimate and display the page's frame rate on the provided UI elemtnt
+ * @param {object} uiElement DOM node to display frame rate
+ * @returns {function} the function to invoke and monitor frame rate
+ */
 export const getFPSMonitor = uiElement => {
   const times = [];
   const ui = uiElement;
