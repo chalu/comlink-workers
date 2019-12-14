@@ -108,7 +108,7 @@ const Analyzer = {
   /**
    * simulate asynchrounous spelling and grammar analysis on the provided text
    * @param {string} text text to analyze grammer on
-   * @param {*} callback main thread function to call when async analysis is complete
+   * @param {function} callback main thread function to call when async analysis is complete
    */
   async analyzeGrammar(text, callback) {
     const status = await checkGrammar(text);
