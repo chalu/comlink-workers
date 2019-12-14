@@ -127,6 +127,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
     <script type="module">
       import { getTimer, getFPSMonitor } from "../../utils.js";
       import * as Comlink from "https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs";
+      import Actions from "./actions.js";
 
       const initApp = async () => {
         const showTime = getTimer(document.querySelector("#timesplainer"));
@@ -142,13 +143,14 @@ Thanks to Comlink, the team had a better experience building this version, so go
         const StateMngr = Comlink.wrap(
           new Worker("./store.webworker.js", { type: "module" })
         );
+
+        // callback function called
+        // when there are state changes
         const stateChanged = async () => {
           const { stats } = await StateMngr.getState();
 
-          // In a typical reactive app, we will update local
-          // copies of portions of the stats object that matter to this view
-          // With such change registered, the render() function will be triggered
-          // and our UI will be updated
+          // In a typical reactive app, this will be 
+          // handled by the render() mechanism automatically
           requestAnimationFrame(() => {
             statsDisplays[0].textContent = stats.chars;
             statsDisplays[1].textContent = stats.words;
@@ -159,6 +161,7 @@ Thanks to Comlink, the team had a better experience building this version, so go
           });
         };
 
+        // wire up the callback setup a subscription for it
         StateMngr.subscribe(Comlink.proxy(stateChanged));
 
         const inputElement = document.querySelector("textarea");
@@ -166,7 +169,8 @@ Thanks to Comlink, the team had a better experience building this version, so go
           const text = field.value || "";
           if (text.trim() === "") return;
 
-          await StateMngr.dispatch({ type: "ANALYZE", text });
+          // dispatch an action
+          await StateMngr.dispatch({ type: Actions.ANALYZETEXT, text });
         });
       };
 

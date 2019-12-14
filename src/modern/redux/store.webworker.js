@@ -12,6 +12,7 @@ import {
 } from "https://unpkg.com/comlink@4.2.0/dist/esm/comlink.mjs";
 import { createStore } from "https://unpkg.com/redux@4.0.4/es/redux.mjs";
 import { Analyzer } from "../../analyzer.js";
+import Actions from "./actions.js";
 
 const initialState = {
   stats: {
@@ -30,7 +31,7 @@ const handleAnalyzeAction = (state, text) => {
 
 const reducer = (state = initialState, { type, text }) => {
   switch (type) {
-    case "ANALYZE":
+    case Actions.ANALYZETEXT:
       return handleAnalyzeAction(state, text);
     default:
       return state;
@@ -46,6 +47,10 @@ const broadcastChanges = async () => {
 };
 store.subscribe(proxy(broadcastChanges));
 
+// state management interface to expose
+// the main thread will call functions in
+// this object and state management will
+// happen in this worker
 const StateMngr = {
   getState() {
     return store.getState();
